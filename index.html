@@ -8,73 +8,110 @@
 <script src="https://cdn.jsdelivr.net/npm/dxf-parser@1.1.2/dist/dxf-parser.js"></script>
 <style>
 :root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light;
---bg:#eceff2;--pn:#fff;--tx:#18222d;--mu:#64707d;--bd:#d5dbe1;--ac:#1f5fbf;--ok:#17894f;--pl:#c77700;--cv:#14202b}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;--bg:#0e1419;--pn:#171f27;--tx:#e6ebf0;--mu:#8b98a5;--bd:#2a3541;--ac:#6aa5ff;--ok:#35d07f;--pl:#ffb020;--cv:#0b1218}}
-:root[data-theme="dark"]{color-scheme:dark;--bg:#0e1419;--pn:#171f27;--tx:#e6ebf0;--mu:#8b98a5;--bd:#2a3541;--ac:#6aa5ff;--ok:#35d07f;--pl:#ffb020;--cv:#0b1218}
+--bg:#e9edf3;--pn:#fff;--sf:#f2f5f9;--tx:#142033;--mu:#66758a;--bd:#dfe5ed;--ac:#2f6bff;--ac2:#6f93ff;--ok:#17894f;--pl:#c77700;--cv:#0f1822;--sh:0 1px 2px rgba(20,32,51,.06),0 10px 28px -14px rgba(20,32,51,.28)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;--bg:#080d13;--pn:#111923;--sf:#17212c;--tx:#e8eef6;--mu:#8696a8;--bd:#233140;--ac:#5b8cff;--ac2:#8aa9ff;--ok:#35d07f;--pl:#ffb020;--cv:#0a1119;--sh:0 1px 0 rgba(255,255,255,.04) inset,0 12px 28px -14px rgba(0,0,0,.7)}}
+:root[data-theme="dark"]{color-scheme:dark;--bg:#080d13;--pn:#111923;--sf:#17212c;--tx:#e8eef6;--mu:#8696a8;--bd:#233140;--ac:#5b8cff;--ac2:#8aa9ff;--ok:#35d07f;--pl:#ffb020;--cv:#0a1119;--sh:0 1px 0 rgba(255,255,255,.04) inset,0 12px 28px -14px rgba(0,0,0,.7)}
 *{box-sizing:border-box}
+[hidden]{display:none!important}
 html,body{height:100%;margin:0}
-body{background:var(--bg);color:var(--tx);font:14px/1.45 "IBM Plex Sans",system-ui,sans-serif;font-variant-numeric:tabular-nums}
-.app{display:grid;grid-template-columns:350px 1fr;height:100%}
-aside{background:var(--pn);border-right:1px solid var(--bd);padding:16px;overflow:auto;display:flex;flex-direction:column;gap:14px}
-h1{font-size:18px;margin:0;font-weight:600}
-.sub{color:var(--mu);margin:2px 0 0;font-size:13px}
-.total{border:1px solid var(--bd);border-radius:6px;padding:12px}
-.total .pc{font-size:40px;font-weight:600;line-height:1}
-.total .sm{color:var(--mu);margin-top:6px}
-.bar{height:8px;background:var(--bd);border-radius:4px;overflow:hidden;margin:8px 0 4px}
-.bar i{display:block;height:100%;background:var(--mu)}
-label{display:block;font-weight:500;margin-bottom:4px}
-.file{display:block;border:1.5px dashed var(--bd);border-radius:6px;padding:12px;text-align:center;cursor:pointer;color:var(--mu)}
-.file:hover{border-color:var(--ac);color:var(--tx)}
+body{background:var(--bg);color:var(--tx);font:14px/1.45 "IBM Plex Sans",system-ui,sans-serif;font-variant-numeric:tabular-nums;-webkit-font-smoothing:antialiased}
+.app{display:grid;grid-template-columns:376px 1fr;height:100%}
+aside{background:var(--bg);padding:14px;overflow:auto;display:flex;flex-direction:column;gap:12px;border-right:1px solid var(--bd)}
+aside::-webkit-scrollbar{width:8px}aside::-webkit-scrollbar-thumb{background:var(--bd);border-radius:4px}
+aside>div{background:var(--pn);border:1px solid var(--bd);border-radius:14px;padding:14px;box-shadow:var(--sh)}
+aside>div:first-child{background:none;border:0;box-shadow:none;padding:2px 2px 4px}
+aside>div>label:first-child{display:block;font-size:11px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--mu);margin:0 0 10px}
+.brand{display:flex;gap:12px;align-items:center}
+.logo{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;flex:none;background:linear-gradient(135deg,var(--ac),#7c5cff);color:#fff;box-shadow:0 8px 18px -8px var(--ac)}
+.logo svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+h1{font-size:18px;margin:0;font-weight:600;letter-spacing:-.01em}
+.sub{color:var(--mu);margin:2px 0 0;font-size:12.5px}
+.total{display:flex;gap:16px;align-items:center}
+.ring{--p:0;width:96px;height:96px;border-radius:50%;flex:none;position:relative;display:grid;place-items:center;background:conic-gradient(var(--ac) calc(var(--p)*1%),var(--bd) 0)}
+.ring::before{content:"";position:absolute;inset:9px;border-radius:50%;background:var(--pn)}
+.ring b{position:relative;font-size:20px;font-weight:600;letter-spacing:-.02em}
+.total .tx{flex:1;min-width:0}.total .cap{font-weight:600;font-size:14px}.total .sm{color:var(--mu);font-size:12.5px;margin:2px 0 8px}
+.bar{height:9px;background:var(--bd);border-radius:5px;overflow:hidden;margin:8px 0 6px}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--ac),var(--ac2));border-radius:5px;transition:width .3s}
+.total .bar{margin:0}
+.file{display:flex;align-items:center;gap:12px;border:1.5px dashed var(--bd);border-radius:14px;padding:13px 14px;cursor:pointer;color:var(--mu);background:var(--pn);transition:.15s}
+.file:hover{border-color:var(--ac);color:var(--tx);background:var(--sf)}
 .file input{display:none}
-select,input[type=text],input[type=number]{width:100%;font:inherit;color:var(--tx);background:var(--bg);border:1px solid var(--bd);border-radius:5px;padding:6px 8px}
-button{font:inherit;color:var(--tx);background:var(--bg);border:1px solid var(--bd);border-radius:5px;padding:6px 10px;cursor:pointer}
-button:hover{border-color:var(--ac)}
-button.on{background:var(--ac);border-color:var(--ac);color:#fff}
-button:focus-visible,select:focus-visible,input:focus-visible,.file:focus-within{outline:2px solid var(--ac);outline-offset:1px}
-.tools{display:flex;flex-wrap:wrap;gap:6px}
-#msg{color:var(--pl);font-size:13px}
-#ly{max-height:210px;overflow:auto;border:1px solid var(--bd);border-radius:5px;margin-top:6px}
-#ly label{display:flex;gap:8px;align-items:center;font-weight:400;margin:0;padding:5px 8px;border-bottom:1px solid var(--bd);cursor:pointer}
-#ly label span{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-#ly small{color:var(--mu)}
-#ly select{width:auto;padding:2px 4px;font-size:12px}
-.sy{display:flex;gap:8px;align-items:center;padding:4px 0;border-bottom:1px solid var(--bd)}
-.sy span{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.sy small{color:var(--mu)}
-.sy select{width:auto;padding:2px 4px;font-size:12px}
-.row input[type=text]{margin:4px 0;padding:3px 6px;font-size:12px}
-.dot{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px}
-.lg{display:flex;flex-wrap:wrap;gap:4px 14px;color:var(--mu);font-size:12px;margin-bottom:8px}
-.q{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:6px 0}
-.q label{font-weight:400;font-size:12px;color:var(--mu);margin:0}
-.row{border:1px solid var(--bd);border-radius:6px;padding:8px;margin-bottom:8px}
-.row .meta{display:flex;justify-content:space-between;color:var(--mu)}
-.row .meta b{color:var(--tx)}
-.row .nm{font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-main{position:relative;min-width:0;min-height:0;background:var(--cv)}
-#cv{width:100%;height:100%;display:block;touch-action:none}
-#hint{position:absolute;left:12px;bottom:12px;right:12px;background:rgba(10,16,22,.82);color:#e6ebf0;padding:8px 12px;border-radius:5px;font-size:13px;pointer-events:none}
-@media (max-width:760px){.app{grid-template-columns:1fr;grid-template-rows:50vh 1fr}aside{border-right:0;border-bottom:1px solid var(--bd)}}
+.file svg{width:26px;height:26px;fill:none;stroke:var(--ac);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.file b{display:block;color:var(--tx);font-weight:600}.file small{font-size:12px}
+#msg{font-size:12.5px;color:var(--pl);background:color-mix(in srgb,var(--pl) 12%,transparent);border:1px solid color-mix(in srgb,var(--pl) 35%,transparent);padding:9px 11px;border-radius:10px;box-shadow:none}
+#msg:empty{display:none}
+label{display:block;font-weight:500}
+select,input[type=text],input[type=number]{width:100%;font:inherit;color:var(--tx);background:var(--sf);border:1px solid var(--bd);border-radius:9px;padding:8px 10px}
+button{font:inherit;color:var(--tx);background:var(--sf);border:1px solid var(--bd);border-radius:9px;padding:7px 12px;cursor:pointer;transition:.12s}
+button:hover{border-color:var(--ac)}button:active{transform:translateY(1px)}
+button:focus-visible,select:focus-visible,input:focus-visible,.file:focus-within{outline:2px solid var(--ac);outline-offset:2px}
+.prow{display:flex;gap:6px}.prow input{flex:1;min-width:0}
+#psave{background:var(--ac);border-color:var(--ac);color:#fff;font-weight:600}
+#pmsg{font-size:12.5px;margin-top:8px}#pmsg:empty{display:none}
+.sy{display:flex;gap:8px;align-items:center;padding:8px 10px;background:var(--sf);border:1px solid var(--bd);border-radius:10px;margin-top:6px}
+.sy span{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:500}
+.sy small{color:var(--mu)}.sy button{padding:3px 10px;font-size:12px}.sy select{width:auto;padding:2px 6px;font-size:12px}
+.row{background:var(--sf);border:1px solid var(--bd);border-radius:12px;padding:10px 12px;margin-top:8px}
+.row:first-child{margin-top:0}
+.row .nm{font-weight:600;display:flex;align-items:center}
+.row input[type=text]{margin:6px 0 0;padding:5px 8px;font-size:12px;background:var(--pn)}
+.meta{display:flex;justify-content:space-between;align-items:baseline;color:var(--mu);font-size:12.5px}
+.meta b{color:var(--tx);font-size:15px;font-weight:600}
+.dot{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:8px}
+.lg{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.lg span{display:inline-flex;align-items:center;font-size:11.5px;color:var(--mu);background:var(--sf);border:1px solid var(--bd);padding:2px 9px;border-radius:999px}
+.lg .dot{margin-right:6px}
+.q{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0 4px}
+.q label{font-size:11.5px;color:var(--mu);font-weight:500}.q input{margin-top:3px}
+main{display:flex;flex-direction:column;min-width:0;min-height:0;background:var(--bg)}
+.tb{display:flex;flex-wrap:wrap;gap:4px 4px;align-items:center;padding:8px 12px;background:var(--pn);border-bottom:1px solid var(--bd);box-shadow:var(--sh);z-index:2}
+.grp{display:flex;align-items:center;gap:2px;padding:0 8px 0 0;margin-right:4px;border-right:1px solid var(--bd)}
+.grp::before{display:none}
+.grp:last-child{border:0}
+.ib{position:relative;display:flex;align-items:center;justify-content:center;width:38px;height:38px;padding:0;border:1px solid transparent;background:none;border-radius:10px}
+.ib:hover{background:var(--sf);border-color:var(--bd)}
+.ib svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.ib.on{background:var(--ac);border-color:var(--ac);color:#fff;box-shadow:0 8px 16px -8px var(--ac)}
+.ib span{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.ib:hover::after{content:attr(data-tip);position:absolute;top:calc(100% + 8px);left:50%;transform:translateX(-50%);white-space:nowrap;background:#0b1118;color:#fff;font-size:12px;font-weight:500;padding:6px 10px;border-radius:8px;z-index:30;pointer-events:none;box-shadow:0 6px 18px rgba(0,0,0,.3)}
+.grp:last-child .ib:hover::after{left:auto;right:0;transform:none}
+.tb select{width:auto;padding:5px 8px;font-size:12px;border-radius:8px;align-self:center}
+.cvw{position:relative;flex:1;min-height:0;margin:12px;border-radius:14px;overflow:hidden;border:1px solid var(--bd);box-shadow:var(--sh);background:var(--cv)}
+#cv{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none}
+#calc{position:absolute;right:14px;top:14px;width:360px;max-width:calc(100% - 28px);max-height:calc(100% - 28px);overflow:auto;background:var(--pn);color:var(--tx);border:1px solid var(--bd);border-radius:14px;box-shadow:var(--sh);padding:14px;z-index:3}
+.ch{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}.ch b{font-size:14px}.ch button{padding:2px 9px}
+.cg{display:grid;grid-template-columns:1fr 1fr;gap:8px}.cg .full{grid-column:1/-1}.chk{display:flex;gap:8px;align-items:center;font-size:12.5px!important;color:var(--tx)!important}.chk input{width:auto;margin:0}.lr{display:flex;gap:6px;margin-top:3px}.lr input{flex:1;min-width:0;margin:0}
+.cg label{font-size:11.5px;color:var(--mu);font-weight:500}.cg input{margin-top:3px}
+.cn{font-size:12px;color:var(--mu);margin:10px 0}
+#cdr svg{display:block;max-width:100%;margin:6px 0}
+.cl{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:11.5px;color:var(--mu);margin:4px 0 10px}.cl i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+.cr{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--bd);font-size:12.5px}.cr span{color:var(--mu)}
+.ct{font-size:30px;font-weight:600;margin-top:10px;letter-spacing:-.02em}.ct small{font-size:13px;color:var(--mu);font-weight:500}
+#info{position:absolute;left:14px;top:14px;display:flex;flex-direction:column;gap:2px;max-width:60%;background:rgba(9,14,20,.82);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);color:#e9eef5;padding:10px 14px;border-radius:12px;font-size:12.5px;border:1px solid rgba(255,255,255,.1)}
+#info b{font-size:13.5px;margin-bottom:2px;word-break:break-all}
+#hint{position:absolute;left:50%;transform:translateX(-50%);bottom:14px;width:max-content;max-width:calc(100% - 28px);background:rgba(9,14,20,.78);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);color:#e9eef5;padding:8px 16px;border-radius:999px;font-size:12.5px;pointer-events:none;border:1px solid rgba(255,255,255,.08);text-align:center}
+#empty{position:absolute;inset:0;display:grid;place-items:center;pointer-events:none;padding:16px}
+.ec{pointer-events:auto;text-align:center;max-width:360px;padding:30px 28px;border:1.5px dashed rgba(255,255,255,.2);border-radius:20px;color:#b9c6d4}
+.ec svg{width:46px;height:46px;stroke:currentColor;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;margin-bottom:10px}
+.ec b{display:block;font-size:17px;color:#fff;margin-bottom:4px}.ec span{display:block;font-size:13px;margin-bottom:16px}
+.btn{display:inline-block;background:var(--ac);color:#fff;padding:9px 20px;border-radius:10px;font-weight:600;cursor:pointer;box-shadow:0 10px 20px -10px var(--ac)}
+@media (max-width:860px){.app{grid-template-columns:1fr;grid-template-rows:46vh 1fr}aside{border-right:0;border-bottom:1px solid var(--bd)}.cvw{margin:8px}}
 </style>
 </head>
 <body>
 <div class="app">
 <aside>
-  <div><h1>Kazı İlerleme Takibi</h1><p class="sub">Çizimi yükleyin, güzergah katmanını seçin, kazılan yerleri işaretleyin.</p></div>
-  <div class="total"><div class="pc" id="tpc">%0</div><div class="bar"><i id="tbar" style="width:0"></i></div><div class="sm" id="tsm">Güzergah katmanı seçilmedi</div></div>
-  <label class="file"><input type="file" id="file" accept=".dxf,.dwg">Çizim yükle (.dxf veya .dwg)</label>
+  <div class="brand"><span class="logo"><svg viewBox="0 0 24 24"><path d="M13 2L4 14h7l-1 8 9-12h-7z"/></svg></span><div><h1>Kazı Takip</h1><p class="sub">Güzergah ve adet ilerlemesi</p></div></div>
+  <div class="total"><div class="ring" id="ring"><b id="tpc">%0</b></div><div class="tx"><div class="cap">Toplam ilerleme</div><div class="sm" id="tsm">Güzergah katmanı seçilmedi</div><div class="bar"><i id="tbar" style="width:0"></i></div></div></div>
+  <label class="file"><input type="file" id="file" accept=".dxf,.dwg"><svg viewBox="0 0 24 24"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 16v3a1 1 0 001 1h14a1 1 0 001-1v-3"/></svg><span><b>Çizim yükle</b><small>.dxf dosyası seçin</small></span></label>
   <div id="msg"></div>
-  <div><label for="unit">Çizim birimi</label>
+  <div><label for="pn">Proje</label><div class="prow"><input type="text" id="pn" placeholder="Proje adı"><button id="psave">Kaydet</button></div><div id="pmsg" class="sub"></div><div id="plist"></div></div>
+  <div hidden><label for="unit">Çizim birimi</label>
     <select id="unit"><option value="0.001">Milimetre</option><option value="0.01">Santimetre</option><option value="1">Metre</option></select></div>
-  <div><label>İşaretleme</label><div class="tools">
-    <button data-m="pan" class="on">Kaydır</button><button data-m="whole">Hattı işaretle</button><button data-m="range">Aralık işaretle</button>
-    <button id="undo">Geri al</button><button id="reset">Sıfırla</button><button id="fit">Sığdır</button></div></div>
-  <div><label>Çizimde olmayanı ekle</label><div class="tools"><button data-m="addline">Hat çiz</button><select id="ncat" aria-label="Hat türü" style="width:auto"><option>AG</option><option>YG</option><option>AYD</option></select><button id="fin">Hattı bitir</button><button data-m="addpole">AYD direk</button><button data-m="addbox">Box</button></div></div>
-  <div><label>Eklenenler</label><div id="ad" class="sub">Henüz eklenen yok</div></div>
-  <div><label for="lf">Güzergah katmanları</label><input type="text" id="lf" placeholder="Katman ara"><div id="ly"></div></div>
+  <div hidden><label>Eklenenler</label><div id="ad" class="sub">Henüz eklenen yok</div></div>
+  <div hidden><label for="lf">Güzergah katmanları</label><input type="text" id="lf" placeholder="Katman ara"><div id="ly"></div></div>
   <div hidden><label>Semboller (Box ve AYD direk)</label><div class="sub" style="margin-bottom:6px">Yalnızca içi dolu daireler (AYD direk) ve dolu üçgenli dikdörtgenler (Box) otomatik önerilir; listeden değiştirebilirsiniz. Direklere değen hatlar AYD olur.</div><div id="sy"></div></div>
-  <div><label>Kablo kesitleri</label><button id="scab" class="on">Kablo yazıları: Açık</button></div>
   <div><label>Güzergah ilerlemesi</label>
     <div class="lg"><span><i class="dot" style="background:#2ecc71"></i>YG</span><span><i class="dot" style="background:#3b8bff"></i>AG</span><span><i class="dot" style="background:#ff9a1f"></i>AYD</span><span>Kalın parlak yeşil: kazılan, ince renkli: kalan</span></div>
     <div id="list"></div></div>
@@ -82,13 +119,27 @@ main{position:relative;min-width:0;min-height:0;background:var(--cv)}
     <div class="row"><div class="nm"><i class="dot" style="background:#a78bfa"></i>Box</div><div class="q"><label>Toplam<input type="number" min="0" step="1" id="bt"></label><label>Tamamlanan<input type="number" min="0" step="1" id="bd"></label></div><div class="bar"><i id="bb" style="background:#a78bfa"></i></div><div class="meta"><span id="bs">0 / 0 adet</span><b id="bp">%0</b></div></div>
     <div class="row"><div class="nm"><i class="dot" style="background:#ff9a1f"></i>AYD direk</div><div class="q"><label>Toplam<input type="number" min="0" step="1" id="dt"></label><label>Tamamlanan<input type="number" min="0" step="1" id="dd"></label></div><div class="bar"><i id="db" style="background:#ff9a1f"></i></div><div class="meta"><span id="ds">0 / 0 adet</span><b id="dp">%0</b></div></div></div>
 </aside>
-<main><canvas id="cv"></canvas><div id="hint"></div></main>
+<main><div class="tb">
+<div class="grp" data-g="İşaretle"><button class="ib" data-m="whole" title="Kazılan hattı, direği veya boxu tıklayarak işaretle"><svg viewBox="0 0 24 24"><path d="M3 19L21 5"/><circle cx="12" cy="12" r="2.6"/></svg><span>Hattı işaretle</span></button><button class="ib" data-m="range" title="Hat üzerinde iki nokta arasını işaretle"><svg viewBox="0 0 24 24"><path d="M5 19L19 5"/><rect x="2.5" y="17" width="4.5" height="4.5"/><rect x="17" y="2.5" width="4.5" height="4.5"/></svg><span>Aralık işaretle</span></button></div>
+<div class="grp" data-g="Ekle"><button class="ib" data-m="addline" title="Yeni hat ekle (türü yandan seçin)"><svg viewBox="0 0 24 24"><path d="M4 19L20 7"/><path d="M18 2v6M15 5h6"/></svg><span>Hat çiz</span></button><select id="ncat" aria-label="Hat türü"><option>AG</option><option>YG</option><option>AYD</option></select><button class="ib" id="fin" title="Çizilen hattı bitir"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7"/></svg><span>Bitir</span></button><button class="ib" data-m="addpole" title="AYD direk ekle"><svg viewBox="0 0 24 24"><circle cx="11" cy="13" r="6" style="fill:currentColor"/><path d="M19 2v6M16 5h6"/></svg><span>AYD direk</span></button><button class="ib" data-m="addbox" title="Box ekle"><svg viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="11"/><path d="M3 7v11h18z" style="fill:currentColor"/></svg><span>Box</span></button></div>
+<div class="grp" data-g="Düzenle"><button class="ib" data-m="del" title="İki köşe tıklayın: içindeki her şey silinir"><svg viewBox="0 0 24 24"><rect x="3.5" y="5.5" width="17" height="13" stroke-dasharray="3 2.5"/><path d="M9 10l6 4M15 10l-6 4"/></svg><span>Sil</span></button><button class="ib" data-m="cutline" title="Hat üzerinde iki nokta arasını kes"><svg viewBox="0 0 24 24"><circle cx="6" cy="6.5" r="2.5"/><circle cx="6" cy="17.5" r="2.5"/><path d="M8 8l12 9.5M8 16L20 6.5"/></svg><span>Hattı kes</span></button><button class="ib" data-m="exmark" title="Hat üzerinde iki nokta arasını mevcut yap"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 018 0v3"/></svg><span>Mevcut yap</span></button><button class="ib" id="undo" title="Son işlemi geri al (Ctrl+Z)"><svg viewBox="0 0 24 24"><path d="M9 5L4 10l5 5"/><path d="M4 10h10a6 6 0 010 12h-3"/></svg><span>Geri al</span></button><button class="ib" id="reset" title="Tüm kazı işaretlerini temizle"><svg viewBox="0 0 24 24"><path d="M5 12a7 7 0 102.5-5.4"/><path d="M5 4v4h4"/></svg><span>Sıfırla</span></button></div>
+<div class="grp" data-g="Hesap"><button class="ib" data-m="meas" title="Çizim üzerinde uzunluk ölç"><svg viewBox="0 0 24 24"><path d="M3 17L17 3l4 4L7 21z"/><path d="M7 13l2 2M10 10l2 2M13 7l2 2"/></svg><span>Ölçü</span></button><button class="ib" id="calcBtn" title="Kanal genişliği hesabı"><svg viewBox="0 0 24 24"><path d="M3 5v14h18V5"/><rect x="7" y="12" width="3" height="3"/><rect x="11" y="12" width="3" height="3"/><rect x="15" y="12" width="3" height="3"/><path d="M3 9h18"/></svg><span>Kanal hesabı</span></button></div>
+<div class="grp" data-g="Görünüm"><button class="ib" id="fit" title="Tüm çizimi göster"><svg viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg><span>Sığdır</span></button><button class="ib" data-m="info" title="Hat bilgisi: katman, uzunluk, durum"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg><span>Hat bilgisi</span></button><button class="ib on" id="scab" title="Kablo yazılarını göster/gizle"><svg viewBox="0 0 24 24"><text x="2" y="17" font-size="14" font-weight="600" style="fill:currentColor;stroke:none">Aa</text></svg><span>Kablo yazısı</span></button></div>
+</div><div class="cvw"><canvas id="cv"></canvas><div id="empty"><div class="ec"><svg viewBox="0 0 24 24"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 16v3a1 1 0 001 1h14a1 1 0 001-1v-3"/></svg><b>Çizim yüklenmedi</b><span>Başlamak için bir DXF çizimi yükleyin; güzergahlar, direkler ve boxlar otomatik tanınır.</span><label class="btn" for="file">Çizim yükle</label></div></div><div id="calc" hidden><div class="ch"><b>Kanal hesabı</b><button id="calcX" aria-label="Kapat">✕</button></div>
+<div class="cg"><label>OG devre adedi<input type="number" id="ogN" min="0" step="1" value="1"></label><label>AG kablo adedi<input type="number" id="agN" min="0" step="1" value="0"></label>
+<label>AYD kablo adedi<input type="number" id="aydN" min="0" step="1" value="0"></label><label>Derinlik (m)<input type="number" id="depN" min="0" step="any" value="1"></label>
+<label class="full">Uzunluk (m)<div class="lr"><input type="number" id="lenN" min="0" step="any" placeholder="Elle yazın veya ölçün"><button id="measGo" title="Çizim üzerinde ölç">Çizimden ölç</button></div></label>
+<label class="full chk"><input type="checkbox" id="pipeN">Borulu (her kabloya 1 boru, 10 cm)</label></div>
+<div class="cn">Her OG devresi 3 kablo (3×1x150) sayılır. Tek devre varsa bims yok; iki devre veya OG+AG/AYD olunca devreler arasına 14 cm bims girer. AG ve AYD kabloları aynı grupta, aralarında 7 cm takoz.</div>
+<div id="cres"></div></div>
+<div id="info" hidden></div><div id="hint"></div></div></main>
 </div>
 <script>
 const $=s=>document.querySelector(s),cv=$("#cv"),cx=cv.getContext("2d");
-let rects=[],exBoxes=[],circs=[],exPoles=[],seen=new Set(),showCab=true,added=[],addPts=[],hoverW=null,fills=[],texts=[],syms={},sigC={},specs={},curBlk=null,catCable={},polys=[],layers={},routeIdx=[],done={},hist=[],bounds=null,view={s:1,tx:0,ty:0},k=.001,mode="pan",hover=null,start=null,drag=null,W=0,H=0;
+let measPts=[],measDone=false,xver=0,cuts=[],cutP=null,rects=[],exBoxes=[],circs=[],exPoles=[],seen=new Set(),showCab=true,added=[],addPts=[],hoverW=null,fills=[],texts=[],syms={},sigC={},specs={},curBlk=null,catCable={},polys=[],layers={},routeIdx=[],done={},hist=[],bounds=null,view={s:1,tx:0,ty:0},k=.001,mode="pan",hover=null,start=null,drag=null,W=0,H=0;
 const HINTS={pan:"Sürükleyerek kaydırın, tekerlekle yakınlaştırın.",whole:"Kazılan hattın üzerine tıklayın: tüm parça kazıldı olarak işaretlenir. Direğe veya boxa tıklarsanız o da yeşil işaretlenir. Tekrar tıklarsanız kaldırılır.",range:"Kazılan kısmın başlangıcına, sonra bitişine tıklayın; arası işaretlenir. Direk ve boxlar bu modda da işaretlenir. Sağ tuşla sürükleyerek kaydırın."};
 Object.assign(HINTS,{addline:"Hattın noktalarını tıklayın (mevcut uç noktalara yapışır). Çift tıklayın, Enter veya Hattı bitir ile tamamlayın. Eklenen hat toplam metraja ve yüzdeye dahil olur.",addpole:"Direk koyacağınız yere tıklayın; AYD direk adedine eklenir.",addbox:"Box koyacağınız yere tıklayın; Box adedine eklenir.",mark:"Direğe veya boxa tıklayın: kurulmuş olarak yeşil işaretlenir ve Tamamlanan adede eklenir. Tekrar tıklarsanız kaldırılır."});
+Object.assign(HINTS,{pan:"Orta tekerleğe basılı tutarak kaydırın, tekerlekle yakınlaştırın. Üstteki araçlardan birini seçin.",del:"Silinecek alanın iki köşesini tıklayın: içindeki hat, direk, box ve yazılar silinir.",cutline:"Hat üzerinde kesilecek kısmın başlangıcına, sonra bitişine tıklayın.",exmark:"Mevcut yapılacak kısmın başlangıcına, sonra bitişine tıklayın: o kısım işaretlenemez olur ve yüzdeye girmez.",info:"Bir hatta tıklayın: katmanı, uzunluğu ve durumu sol üstte görünür.",meas:"Ölçmek istediğiniz yolu tıklayarak çizin (uç noktalara yapışır). Çift tıklayın veya Enter ile bitirin: uzunluk Kanal hesabına aktarılır."});
 const CAT={YG:{n:"YG",c:"#2ecc71"},AG:{n:"AG",c:"#3b8bff"},AYD:{n:"AYD",c:"#ff9a1f"}};
 const guess=n=>/(?<![a-zçğıöşü])yg(?![a-zçğıöşü])|yüksek|yuksek|orta gerilim/i.test(n)?"YG":/(?<![a-zçğıöşü])ayd(?![a-zçğıöşü])|ayd[ıi]nlat/i.test(n)?"AYD":"AG";
 const AUTO=/güzergah|guzergah|kablo|route|cable|kazı|kazi|(?<![a-zçğıöşü])(yg|ag|ayd)(?![a-zçğıöşü])/i,IGN=["TEXT","MTEXT","ATTRIB","ATTDEF","DIMENSION","HATCH","POINT"];
@@ -122,14 +173,14 @@ function sig(n,b){if(sigC[n])return sigC[n];let rb=null,bx0=1e300,bx1=-1e300,by0
   return sigC[n]={bw:Math.max(bx1-bx0,0),bh:Math.max(by1-by0,0),bcx:(bx0+bx1)/2,bcy:(by0+by1)/2,rect,circ,cx:cx0,cy:cy0,fc,ftri,desc:parts.join(", "),guess:fc?"AYD":(rect&&ftri)?"Box":""}}
 const cleanT=t=>t.replace(/\\[Pp]/g,"\n").replace(/\\[A-Za-z][^;\\]*;/g,"").replace(/[{}]/g,"").replace(/%%[cC]/g,"Ø").replace(/%%[dD]/g,"°").replace(/%%[pP]/g,"±");
 function cab(t){for(const ln of cleanT(t).split("\n")){const q=ln.replace(/\s+/g," ").trim();if(q.length<60&&/\d+\s*[xX×]\s*\d+/.test(q))specs[q]=(specs[q]||0)+1}}
-function addText(e,t,m){
+function addText(e,t,m,ly){
   const lines=cleanT(e.text).split("\n").map(x=>x.trim()).filter(Boolean);if(!lines.length)return;
   let P,h,ha,va;const rot=e.rotation||0;
   if(t!=="MTEXT"){P=(e.halign||e.valign)&&e.endPoint?e.endPoint:e.startPoint;h=e.textHeight||e.height||1;
     ha=["left","center","right","center","center","center"][e.halign||0]||"left";va=e.halign===4?"middle":["alphabetic","bottom","middle","top"][e.valign||0]||"alphabetic"}
   else{P=e.position;h=e.height||e.textHeight||1;const ap=e.attachmentPoint||1;ha=["left","center","right"][(ap-1)%3];va=ap<=3?"top":ap<=6?"middle":"bottom"}
   if(!P)return;const q=tf(m,P.x,P.y);
-  texts.push({x:q[0],y:q[1],h:h*Math.hypot(m[0],m[1]),rot:rot*Math.PI/180+Math.atan2(m[1],m[0]),s:lines,ha,va,cb:lines.some(l=>l.length<60&&/\d+\s*[xX×]\s*\d+/.test(l))})}
+  texts.push({x:q[0],y:q[1],h:h*Math.hypot(m[0],m[1]),rot:rot*Math.PI/180+Math.atan2(m[1],m[0]),s:lines,ha,va,ly,cb:lines.some(l=>l.length<60&&/\d+\s*[xX×]\s*\d+/.test(l))})}
 function bulgeH(a,b,bg,o){bulge(a,b,bg,o)}
 function scanHatch(txt){
   const L=txt.split(/\r?\n/),n=L.length,out={ents:[],blocks:{}};let sec="",blk=null,i=0;
@@ -177,10 +228,10 @@ function parseHatch(g){
 function injectH(d,txt){if(!txt.includes("HATCH"))return;const h=scanHatch(txt);d.entities=(d.entities||[]).concat(h.ents);
   for(const nm in h.blocks){const b=d.blocks&&d.blocks[nm];if(b)b.entities=(b.entities||[]).concat(h.blocks[nm])}}
 function drawFills(){const g=cx;g.fillStyle="#f1f5f9";g.beginPath();
-  for(const f of fills){const a=w2s(f.pts[0]);if(a[0]<-5e3||a[0]>W+5e3||a[1]<-5e3||a[1]>H+5e3)continue;g.moveTo(a[0],a[1]);for(let i=1;i<f.pts.length;i++){const b=w2s(f.pts[i]);g.lineTo(b[0],b[1])}g.closePath()}
+  for(const f of fills){if(f.cut)continue;const a=w2s(f.pts[0]);if(a[0]<-5e3||a[0]>W+5e3||a[1]<-5e3||a[1]>H+5e3)continue;g.moveTo(a[0],a[1]);for(let i=1;i<f.pts.length;i++){const b=w2s(f.pts[i]);g.lineTo(b[0],b[1])}g.closePath()}
   g.fill()}
 function drawTexts(){const g=cx;g.fillStyle="#e6ebf0";
-  for(const t of texts){if(t.cb&&!showCab)continue;const hs=t.h*view.s;if(hs<4||hs>400)continue;const p=w2s([t.x,t.y]);if(p[0]<-400||p[0]>W+400||p[1]<-400||p[1]>H+400)continue;
+  for(const t of texts){if(t.cut||(t.cb&&!showCab))continue;const hs=t.h*view.s;if(hs<4||hs>400)continue;const p=w2s([t.x,t.y]);if(p[0]<-400||p[0]>W+400||p[1]<-400||p[1]>H+400)continue;
     g.save();g.translate(p[0],p[1]);g.rotate(-t.rot);g.font=hs+"px 'IBM Plex Sans',sans-serif";g.textAlign=t.ha;g.textBaseline=t.va;
     const n=t.s.length;t.s.forEach((ln,i)=>g.fillText(ln,0,(t.va==="bottom"?i-(n-1):i)*hs*1.25));g.restore()}}
 function renderCab(){const e=Object.entries(specs).sort((a,b)=>b[1]-a[1]).slice(0,14);$("#cab").textContent=e.length?e.map(([a,b])=>a+" ("+b+")").join(", "):"Çizimde kablo yazısı bulunamadı."}
@@ -189,7 +240,7 @@ function flat(list,m,d,depth,pl,skip){
   for(const e of list||[]){
     if(e.inPaperSpace)continue;
     const ly=(e.layer&&e.layer!=="0")?e.layer:(pl||e.layer||"0");
-    const add=pts=>{if(pts.length<2)return;const q=pts.map(p=>tf(m,p.x,p.y));polys.push({pts:q,layer:ly,sk:curBlk?"B:"+curBlk:(t==="CIRCLE"&&e.radius?"C:"+e.radius.toFixed(3):null)})};
+    const add=pts=>{if(pts.length<2)return;const q=pts.map(p=>tf(m,p.x,p.y));polys.push({pts:q,layer:ly,col:e.color,sk:curBlk?"B:"+curBlk:(t==="CIRCLE"&&e.radius?"C:"+e.radius.toFixed(3):null)})};
     const t=e.type;
     if(t==="CIRCLE"&&e.radius){const c0=tf(m,e.center.x,e.center.y);circs.push({x:c0[0],y:c0[1],r:e.radius*Math.hypot(m[0],m[1])})}
     if(t==="CIRCLE"&&!curBlk&&e.radius){const c=tf(m,e.center.x,e.center.y);addSym("C:"+e.radius.toFixed(3),"Daire r="+fmt(e.radius,3),c[0],c[1],e.radius*Math.hypot(m[0],m[1]),"")}
@@ -207,10 +258,10 @@ function flat(list,m,d,depth,pl,skip){
     }else if(t==="HFILL"||t==="SOLID"){
       let P=t==="HFILL"?e.pts:(e.points||[]).map(p=>({x:p.x,y:p.y}));
       if(t==="SOLID"&&P.length===4){P=[P[0],P[1],P[3],P[2]];if(P[2].x===P[3].x&&P[2].y===P[3].y)P.pop()}
-      if(P.length>2){fills.push({pts:P.map(p=>tf(m,p.x,p.y))});
+      if(P.length>2){fills.push({pts:P.map(p=>tf(m,p.x,p.y)),layer:ly});
         if(e.circ){const c=tf(m,e.circ.x,e.circ.y),key="p"+Math.round(c[0]*20)+","+Math.round(c[1]*20);
-          if(!seen.has(key)){seen.add(key);addSym("G:pole","Dolu daire (AYD direk)",c[0],c[1],e.circ.r*Math.hypot(m[0],m[1]),"AYD");const L=syms["G:pole"].items;L[L.length-1].blk=curBlk}}
-        else if(P.length===3)boxTri(P.map(p=>tf(m,p.x,p.y)))}
+          if(!seen.has(key)){seen.add(key);addSym("G:pole","Dolu daire (AYD direk)",c[0],c[1],e.circ.r*Math.hypot(m[0],m[1]),"AYD");const L=syms["G:pole"].items;L[L.length-1].blk=curBlk;L[L.length-1].ly=ly}}
+        else if(P.length===3)boxTri(P.map(p=>tf(m,p.x,p.y)),ly)}
     }else if(t==="SPLINE"){const p=(e.fitPoints&&e.fitPoints.length>1)?e.fitPoints:e.controlPoints;if(p)add(p)}
     else if(t==="INSERT"&&depth<6){
       const b=d.blocks&&d.blocks[e.name];if(!b)continue;
@@ -218,7 +269,7 @@ function flat(list,m,d,depth,pl,skip){
       const mb=mul(m,[c*sx,s*sx,-s*sy,c*sy,ip.x-c*sx*bp.x+s*sy*bp.y,ip.y-s*sx*bp.x-c*sy*bp.y]);
       if(!curBlk){const g=sig(e.name,b);let pos=g.bw>0?tf(mb,g.bcx,g.bcy):tf(m,ip.x,ip.y),rr=0;const cc=g.fc||(g.circ?{x:g.cx,y:g.cy,r:g.circ}:null);if(cc){pos=tf(mb,cc.x,cc.y);rr=cc.r*Math.hypot(mb[0],mb[1])}addSym("B:"+e.name,"Blok "+e.name+(g.desc?" ("+g.desc+")":""),pos[0],pos[1],rr,"");{const L=syms["B:"+e.name].items,l=L[L.length-1],sc=Math.hypot(mb[0],mb[1]);l.w=g.bw*sc;l.h=g.bh*sc;l.ang=Math.atan2(mb[1],mb[0])}}
       const pb=curBlk;if(!curBlk)curBlk=e.name;flat(b.entities,mb,d,depth+1,ly,skip);curBlk=pb;
-    }else if((t==="TEXT"||t==="MTEXT"||t==="ATTRIB")&&e.text&&!e.invisible){cab(e.text);addText(e,t,m)}
+    }else if((t==="TEXT"||t==="MTEXT"||t==="ATTRIB")&&e.text&&!e.invisible){cab(e.text);addText(e,t,m,ly)}
     else if(!IGN.includes(t))skip[t]=(skip[t]||0)+1;
   }
   if(segs.length>=4)lineRects(segs);
@@ -226,7 +277,7 @@ function flat(list,m,d,depth,pl,skip){
 function load(txt){
   let d;const P=window.DxfParser&&(window.DxfParser.default||window.DxfParser),skip={};
   try{d=new P().parseSync(txt)}catch(e){msg("DXF okunamadı: "+e.message+". DXF’i ASCII olarak (ikili değil) kaydedin.");return}
-  polys=[];layers={};done={};hist=[];syms={};sigC={};specs={};fills=[];texts=[];added=[];addPts=[];seen=new Set();circs=[];exPoles=[];rects=[];exBoxes=[];curBlk=null;injectH(d,txt);flat(d.entities,[1,0,0,1,0,0],d,0,null,skip);
+  polys=[];layers={};done={};hist=[];cuts=[];syms={};sigC={};specs={};fills=[];texts=[];added=[];addPts=[];seen=new Set();circs=[];exPoles=[];rects=[];exBoxes=[];curBlk=null;injectH(d,txt);flat(d.entities,[1,0,0,1,0,0],d,0,null,skip);
   if(!polys.length){msg("Çizimde okunabilir çizgi bulunamadı.");return}
   let x0=1e300,y0=1e300,x1=-1e300,y1=-1e300;
   polys=polys.filter(p=>p.pts.every(v=>isFinite(v[0])&&isFinite(v[1])));
@@ -234,16 +285,16 @@ function load(txt){
       if(b[0]<x0)x0=b[0];if(b[0]>x1)x1=b[0];if(b[1]<y0)y0=b[1];if(b[1]>y1)y1=b[1]}
     p.L=p.cum[p.cum.length-1];const l=layers[p.layer]||(layers[p.layer]={n:0,route:p.layer!=="0"&&AUTO.test(p.layer),cat:guess(p.layer)});l.n++}
   bounds={x0,y0,x1,y1};
-  const u=d.header&&d.header.$INSUNITS;k=u===5?.01:u===6?1:.001;$("#unit").value=String(k);
+  k=1;
   const sk=Object.entries(skip).map(([a,b])=>a+" "+b).join(", ");
   msg("");
-  classifyBoxes();polyRects();findExBoxes();refresh(true);fit();
+  classifyBoxes();polyRects();findExBoxes();refresh(true);syncDone();fit();$("#empty").hidden=true;
 }
 async function readDxf(f){
   const buf=await f.arrayBuffer();let t;
   try{t=new TextDecoder("utf-8",{fatal:true}).decode(buf)}catch(e){t=new TextDecoder("windows-1254").decode(buf)}
   if(t.startsWith("AutoCAD Binary DXF")){msg("Bu ikili (binary) DXF. AutoCAD’de ASCII DXF olarak kaydedin.");return}
-  load(t);
+  srcText=t;curProj=null;$("#pn").value=$("#pn").value||f.name.replace(/\.dxf$/i,"");load(t);
 }
 $("#file").addEventListener("change",e=>{
   const f=e.target.files[0];if(!f)return;const n=f.name.toLowerCase();
@@ -258,7 +309,7 @@ const dlen=i=>merged(done[i]).reduce((s,v)=>s+v[1]-v[0],0);
 const catOf=p=>p.cat||(p.ayd?"AYD":layers[p.layer].cat);
 function refresh(sym){
   for(const p of polys){p.skip=!!(p.sk||p.del);p.ayd=false}
-  const poles=[];for(const q of Object.values(syms))if(q.assign==="AYD")for(const it of q.items)if(it.r>0)poles.push(it);
+  const poles=[];for(const q of Object.values(syms))if(q.assign==="AYD")for(const it of q.items)if(it.r>0&&!it.cut)poles.push(it);
   if(poles.length){
     const cs=Math.max(...poles.map(o=>o.r))*3,grid=new Map(),key=(x,y)=>Math.floor(x/cs)+","+Math.floor(y/cs);
     polys.forEach((p,i)=>{if(p.skip||p.layer==="0")return;for(const v of p.pts){const kk=key(v[0],v[1]),a=grid.get(kk);if(a){if(a[a.length-1]!==i)a.push(i)}else grid.set(kk,[i])}});
@@ -268,20 +319,20 @@ function refresh(sym){
   routeIdx=[];polys.forEach((p,i)=>{p.rt=!p.skip&&(p.add||(p.layer!=="0"&&(p.ayd||layers[p.layer].route)));if(p.rt)routeIdx.push(i)});
   markExisting();if(sym!=="s")renderLayers();if(sym)syncCounts();renderSyms();renderAdded();render();
 }
-function syncCounts(){let b=0,d=0;for(const q of Object.values(syms)){if(q.assign==="Box")b+=q.items.filter(i=>!i.ex).length;if(q.assign==="AYD")d+=q.items.length}for(const a of added){if(a.k==="box")b++;if(a.k==="pole")d++}$("#bt").value=b||"";$("#dt").value=d||"";qty()}
+function syncCounts(){let b=0,d=0;for(const q of Object.values(syms)){if(q.assign==="Box")b+=q.items.filter(i=>!i.ex&&!i.cut).length;if(q.assign==="AYD")d+=q.items.filter(i=>!i.cut).length}for(const a of added){if(a.cut)continue;if(a.k==="box")b++;if(a.k==="pole")d++}$("#bt").value=b||"";$("#dt").value=d||"";qty()}
 function renderSyms(){const e=Object.entries(syms).sort((a,b)=>b[1].items.length-a[1].items.length).slice(0,60);
   $("#sy").innerHTML=e.map(([id,q])=>`<div class="sy"><span title="${esc(q.label)}">${esc(q.label)}</span><small>${q.items.length}</small><select data-s="${esc(id)}" aria-label="Sembol türü">${["","Box","AYD"].map(o=>`<option value="${o}" ${q.assign===o?"selected":""}>${o==="AYD"?"AYD direk":o||"Yok"}</option>`).join("")}</select></div>`).join("")||`<div class="sub">Sembol bulunamadı.</div>`}
 $("#sy").addEventListener("change",e=>{const id=e.target.dataset.s;if(id!=null){syms[id].assign=e.target.value;refresh("s")}});
 function drawSyms(){const g=cx;g.lineWidth=1.5;
   for(const q of Object.values(syms)){if(!q.assign)continue;g.strokeStyle=q.assign==="Box"?"#a78bfa":"#ff9a1f";
-    for(const it of q.items){if(it.ex||it.done)continue;const p=w2s([it.x,it.y]);if(p[0]<-20||p[0]>W+20||p[1]<-20||p[1]>H+20)continue;g.beginPath();
+    for(const it of q.items){if(it.ex||it.done||it.cut)continue;const p=w2s([it.x,it.y]);if(p[0]<-20||p[0]>W+20||p[1]<-20||p[1]>H+20)continue;g.beginPath();
       if(q.assign==="Box")g.rect(p[0]-8,p[1]-8,16,16);else g.arc(p[0],p[1],Math.max(it.r*view.s*1.3,7),0,6.283);g.stroke()}}}
 function render(){
   const by={};let tp=0,td=0;
   for(const i of routeIdx){const p=polys[i],c=catOf(p),b=by[c]||(by[c]={t:0,d:0}),Lp=effL(p),dl=Math.min(effDone(i),Lp);b.t+=Lp;b.d+=dl;tp+=Lp;td+=dl}
   $("#list").innerHTML=Object.keys(CAT).filter(c=>by[c]).map(c=>{const b=by[c],p=b.t?b.d/b.t*100:0;
     return `<div class="row"><div class="nm"><i class="dot" style="background:${CAT[c].c}"></i>${CAT[c].n}</div><input type="text" data-cab="${c}" placeholder="Kablo (örn. 3x240)" value="${esc(catCable[c]||"")}" aria-label="${CAT[c].n} kablo kesiti"><div class="bar"><i style="width:${p}%;background:${CAT[c].c}"></i></div><div class="meta"><span>${fmt(b.d*k)} / ${fmt(b.t*k)} m</span><b>%${fmt(p)}</b></div></div>`}).join("")||`<div class="sub">Yukarıdan güzergah katmanını seçin.</div>`;
-  const P=tp?td/tp*100:0;$("#tpc").textContent="%"+fmt(P);$("#tbar").style.width=P+"%";
+  const P=tp?td/tp*100:0;$("#tpc").textContent="%"+fmt(P);$("#tbar").style.width=P+"%";$("#ring").style.setProperty("--p",P);
   $("#tsm").textContent=tp?`${fmt(td*k)} m kazıldı, toplam ${fmt(tp*k)} m`:"Güzergah katmanı seçilmedi";
   draw();
 }
@@ -299,9 +350,9 @@ function sub(p,a,b){const o=[at(p,a)];for(let j=1;j<p.pts.length;j++)if(p.cum[j]
 function pick(x,y,only){
   const w=s2w(x,y);let bd=(only!=null?40:12)/view.s,best=null;
   for(const i of only!=null?[only]:routeIdx){const p=polys[i];
-    for(let j=1;j<p.pts.length;j++){if(p.exI){const md=(p.cum[j-1]+p.cum[j])/2;if(p.exI.some(v=>md>=v[0]&&md<=v[1]))continue}const A=p.pts[j-1],B=p.pts[j],dx=B[0]-A[0],dy=B[1]-A[1],l2=dx*dx+dy*dy;
+    for(let j=1;j<p.pts.length;j++){const A=p.pts[j-1],B=p.pts[j],dx=B[0]-A[0],dy=B[1]-A[1],l2=dx*dx+dy*dy;
       let t=l2?((w[0]-A[0])*dx+(w[1]-A[1])*dy)/l2:0;t=Math.max(0,Math.min(1,t));
-      const d=Math.hypot(A[0]+t*dx-w[0],A[1]+t*dy-w[1]);if(d<bd){bd=d;best={i,s:p.cum[j-1]+t*Math.sqrt(l2)}}}}
+      const d=Math.hypot(A[0]+t*dx-w[0],A[1]+t*dy-w[1]);if(d<bd){const sS=p.cum[j-1]+t*Math.sqrt(l2),X=xi(p);if(!(X&&X.some(v=>sS>=v[0]&&sS<=v[1]))){bd=d;best={i,s:sS}}}}}
   return best;
 }
 const save=()=>{hist.push(JSON.stringify(done));if(hist.length>100)hist.shift()};
@@ -311,13 +362,13 @@ function range(i,a,b){if(Math.abs(b-a)<1e-9)return;save();(done[i]=done[i]||[]).
 function draw(){
   const g=cx,cs=getComputedStyle(document.documentElement);
   g.fillStyle=cs.getPropertyValue("--cv");g.fillRect(0,0,W,H);
-  if(!bounds){g.fillStyle="#8b98a5";g.font="15px 'IBM Plex Sans',sans-serif";g.textAlign="center";g.fillText("Başlamak için bir çizim yükleyin",W/2,H/2);return}
+  if(!bounds)return;
   const path=(list,col,w)=>{g.strokeStyle=col;g.lineWidth=w;g.beginPath();for(const p of list){const a=w2s(p[0]);g.moveTo(a[0],a[1]);for(let i=1;i<p.length;i++){const b=w2s(p[i]);g.lineTo(b[0],b[1])}}g.stroke()};
-  path(polys.filter(p=>!p.rt&&!p.del).map(p=>p.pts),"#8693a1",1);drawSyms();
+  path(polys.filter(p=>!p.rt&&!p.del).flatMap(pieces),"#8693a1",1);drawSyms();
   for(const c in CAT){
     const ids=routeIdx.filter(i=>catOf(polys[i])===c);if(!ids.length)continue;
-    path(ids.map(i=>polys[i].pts),CAT[c].c,2.6);
-    const dn=[];for(const i of ids)if(done[i])for(const v of clipEx(merged(done[i]),polys[i].exI))dn.push(sub(polys[i],v[0],v[1]));
+    path(ids.flatMap(i=>pieces(polys[i])),CAT[c].c,2.6);
+    const dn=[];for(const i of ids)if(done[i])for(const v of clipEx(merged(done[i]),xi(polys[i])))dn.push(sub(polys[i],v[0],v[1]));
     path(dn,"#0b1218",9);path(dn,"#19f06a",6);
   }
   
@@ -330,21 +381,22 @@ function draw(){
     else if(hover){const s=w2s(at(polys[hover.i],hover.s));g.strokeStyle="#fff";g.lineWidth=1.5;g.strokeRect(s[0]-6,s[1]-6,12,12)}
   }
 }
-function setMode(m){mode=m;start=null;hover=null;addPts=[];hoverW=null;document.querySelectorAll("[data-m]").forEach(b=>b.classList.toggle("on",b.dataset.m===m));$("#hint").textContent=HINTS[m];draw()}
-document.querySelectorAll("[data-m]").forEach(b=>b.onclick=()=>setMode(b.dataset.m));
-$("#fit").onclick=fit;$("#fin").onclick=finishLine;
-$("#scab").onclick=e=>{showCab=!showCab;e.target.classList.toggle("on",showCab);e.target.textContent="Kablo yazıları: "+(showCab?"Açık":"Kapalı");draw()};
-cv.addEventListener("dblclick",()=>{if(mode==="addline")finishLine()});
+function setMode(m){mode=m;start=null;hover=null;addPts=[];hoverW=null;cutP=null;$("#info").hidden=true;document.querySelectorAll("[data-m]").forEach(b=>b.classList.toggle("on",b.dataset.m===m));$("#hint").textContent=HINTS[m];draw()}
+document.querySelectorAll("[data-m]").forEach(b=>b.onclick=()=>setMode(mode===b.dataset.m?"pan":b.dataset.m));
+$("#fit").onclick=fit;$("#fin").onclick=()=>{if(mode==="meas")measFinish();else finishLine()};
+cv.addEventListener("mousedown",e=>{if(e.button===1)e.preventDefault()});cv.addEventListener("auxclick",e=>e.preventDefault());
+$("#scab").onclick=e=>{showCab=!showCab;e.currentTarget.classList.toggle("on",showCab);draw()};
+cv.addEventListener("dblclick",()=>{if(mode==="addline")finishLine();else if(mode==="meas")measFinish()});
 $("#ad").addEventListener("click",e=>{const i=e.target.dataset.ad;if(i==null)return;const a=added[+i];added.splice(+i,1);
   if(a.k==="line"){a.p.del=true;delete done[polys.indexOf(a.p)];refresh()}else{bump(a.k==="pole"?"#dt":"#bt",-1);syncDone();renderAdded();draw()}});
-$("#undo").onclick=()=>{if(hist.length){done=JSON.parse(hist.pop());render()}};
+$("#undo").onclick=()=>{if(!hist.length)return;const x=hist.pop();if(typeof x==="string"){done=JSON.parse(x);render()}else{cuts.pop();applyCuts();syncCounts();syncDone();refresh()}};
 $("#reset").onclick=()=>{if(Object.keys(done).length){save();done={};render()}for(const o of symList())delete o.it.done;syncDone();draw()};
 cv.addEventListener("contextmenu",e=>e.preventDefault());
 cv.addEventListener("pointerdown",e=>{
   const r=cv.getBoundingClientRect(),x=e.clientX-r.left,y=e.clientY-r.top;
   if(e.button!==0||mode==="pan"){drag={x,y,tx:view.tx,ty:view.ty};cv.setPointerCapture(e.pointerId);return}
   if(!bounds)return;
-  if(mode[0]==="a")addAt(x,y);else if(mode==="whole"){if(!markSym(x,y)){const h=pick(x,y);if(h)whole(h.i)}}
+  if(mode==="del")delClick(x,y);else if(mode==="cutline")cutClick(x,y);else if(mode==="info")infoClick(x,y);else if(mode==="exmark")exClick(x,y);else if(mode==="meas")measClick(x,y);else if(mode[0]==="a")addAt(x,y);else if(mode==="whole"){if(!markSym(x,y)){const h=pick(x,y);if(h)whole(h.i)}}
   else if(!start){if(!markSym(x,y)){const h=pick(x,y);if(h){start=h;draw()}}}
   else{const h=pick(x,y,start.i);if(h){const s=start;start=null;range(s.i,s.s,h.s)}}
 });
@@ -353,7 +405,7 @@ cv.addEventListener("pointermove",e=>{
   const r=cv.getBoundingClientRect(),x=e.clientX-r.left,y=e.clientY-r.top;
   if(drag){view.tx=drag.tx+x-drag.x;view.ty=drag.ty+y-drag.y;draw();return}
   if(mode==="pan"||!bounds||raf)return;
-  raf=requestAnimationFrame(()=>{raf=0;if(mode[0]==="a")hoverW=s2w(x,y);else if(mode==="mark")hover=null;else hover=pick(x,y,start?start.i:null);draw()});
+  raf=requestAnimationFrame(()=>{raf=0;if(mode[0]==="a"||mode==="del"||mode==="meas")hoverW=s2w(x,y);else if(mode==="mark"||mode==="info")hover=null;else hover=pick(x,y,start?start.i:null);draw()});
 });
 cv.addEventListener("pointerup",()=>{drag=null});
 cv.addEventListener("wheel",e=>{
@@ -362,7 +414,7 @@ cv.addEventListener("wheel",e=>{
 },{passive:false});
 addEventListener("keydown",e=>{
   if(e.target.matches("input,select"))return;
-  if(e.key==="Escape"){start=null;addPts=[];draw()}else if(e.key==="Enter"&&mode==="addline")finishLine();else if(e.key==="z"&&(e.ctrlKey||e.metaKey))$("#undo").click();
+  if(e.key==="Escape"){if(start||addPts.length||cutP||measPts.length){start=null;addPts=[];cutP=null;measPts=[];measDone=false;draw()}else setMode("pan")}else if(e.key==="Enter"&&mode==="addline")finishLine();else if(e.key==="Enter"&&mode==="meas")measFinish();else if(e.key==="z"&&(e.ctrlKey||e.metaKey))$("#undo").click();
 });
 function bump(id,n){const e=$(id);e.value=Math.max(0,(parseInt(e.value)||0)+n);qty()}
 function mkLine(pts,cat){const p={pts,layer:"Eklenen",sk:null,cat,add:true,cum:[0]};for(let i=1;i<pts.length;i++)p.cum.push(p.cum[i-1]+Math.hypot(pts[i][0]-pts[i-1][0],pts[i][1]-pts[i-1][1]));p.L=p.cum[p.cum.length-1];return p}
@@ -379,11 +431,11 @@ function finishLine(){const q=addPts.filter((v,i)=>i===0||v[0]!==addPts[i-1][0]|
   const p=mkLine(q,$("#ncat").value);polys.push(p);added.push({k:"line",cat:p.cat,p});refresh()}
 function renderAdded(){$("#ad").innerHTML=added.map((a,i)=>`<div class="sy"><span>${a.k==="line"?"Hat "+a.cat+", "+fmt(a.p.L*k)+" m":a.k==="pole"?"AYD direk":"Box"}</span><button data-ad="${i}" aria-label="Sil">✕</button></div>`).join("")||"Henüz eklenen yok"}
 function kw(t){const z=t.toLowerCase().replace(/[^a-z0-9]+/g," ");return z.replace(/ /g,"").includes("camelf")?1:(/(^| )(gal|sya)( |$)/.test(z)?2:0)}
-function boxTri(W){for(let i=0;i<3;i++){const V=W[i],A=W[(i+1)%3],B=W[(i+2)%3],ux=A[0]-V[0],uy=A[1]-V[1],vx=B[0]-V[0],vy=B[1]-V[1],lu=Math.hypot(ux,uy),lv=Math.hypot(vx,vy);if(!lu||!lv)continue;
+function boxTri(W,ly){for(let i=0;i<3;i++){const V=W[i],A=W[(i+1)%3],B=W[(i+2)%3],ux=A[0]-V[0],uy=A[1]-V[1],vx=B[0]-V[0],vy=B[1]-V[1],lu=Math.hypot(ux,uy),lv=Math.hypot(vx,vy);if(!lu||!lv)continue;
   if(Math.abs(ux*vx+uy*vy)/(lu*lv)>0.06)continue;
   const hi=Math.max(lu,lv),lo=Math.min(lu,lv);if(hi/lo<1.3||hi/lo>3.8)return;
   const c=[V[0]+(ux+vx)/2,V[1]+(uy+vy)/2],key="b"+Math.round(c[0]*20)+","+Math.round(c[1]*20);if(seen.has(key))return;seen.add(key);
-  addSym("G:box","Dolu üçgen (box)",c[0],c[1],0,"Box");const L=syms["G:box"].items,l=L[L.length-1];l.w=hi;l.h=lo;l.ang=lu>=lv?Math.atan2(uy,ux):Math.atan2(vy,vx);l.blk=curBlk;l.g=[V,A,B];return}}
+  addSym("G:box","Dolu üçgen (box)",c[0],c[1],0,"Box");const L=syms["G:box"].items,l=L[L.length-1];l.w=hi;l.h=lo;l.ang=lu>=lv?Math.atan2(uy,ux):Math.atan2(vy,vx);l.blk=curBlk;l.ly=ly;l.g=[V,A,B];return}}
 function filterPoles(){const q=syms["G:pole"];if(!q)return;const f={};for(const it of q.items){const z=it.r.toPrecision(2);f[z]=(f[z]||0)+1}
   let top=0,bc=0;for(const z in f)if(f[z]>bc){bc=f[z];top=parseFloat(z)}
   q.items=q.items.filter(it=>it.r>=top*.5&&it.r<=top*3)}
@@ -395,7 +447,7 @@ function classifyBoxes(){let c0=0,c1=0,c2=0;filterPoles();findExPoles();
         for(const t of texts){const d=Math.hypot(t.x-it.x,t.y-it.y);if(d<R&&d<bd){const z=kw(t.s.join(" "));if(z){bd=d;c=z}}}}
       it.ex=c===2;if(c===1)c1++;else if(c===2)c2++;else c0++}}
   }
-function symList(){const o=[];for(const q of Object.values(syms))if(q.assign)for(const it of q.items)if(!it.ex)o.push({it,kind:q.assign});for(const a of added)if(a.k!=="line")o.push({it:a,kind:a.k==="pole"?"AYD":"Box"});return o}
+function symList(){const o=[];for(const q of Object.values(syms))if(q.assign)for(const it of q.items)if(!it.ex&&!it.cut)o.push({it,kind:q.assign});for(const a of added)if(a.k!=="line"&&!a.cut)o.push({it:a,kind:a.k==="pole"?"AYD":"Box"});return o}
 function syncDone(){let b=0,d=0;for(const o of symList())if(o.it.done){if(o.kind==="Box")b++;else d++}$("#bd").value=b||"";$("#dd").value=d||"";qty()}
 function markSym(x,y){let best=null,bd=1e9;
   for(const o of symList()){const p=w2s([o.it.x,o.it.y]),d=Math.hypot(p[0]-x,p[1]-y),th=Math.max(10,(o.it.r||(o.it.w||0)/2)*view.s*1.2);if(d<th&&d<bd){bd=d;best=o}}
@@ -409,16 +461,18 @@ function boxDone(g,G){const [V,A,B]=G.map(w2s),D=[A[0]+B[0]-V[0],A[1]+B[1]-V[1]]
   g.strokeStyle="#19f06a";g.lineWidth=2;g.beginPath();g.moveTo(V[0],V[1]);g.lineTo(A[0],A[1]);g.lineTo(D[0],D[1]);g.lineTo(B[0],B[1]);g.closePath();g.stroke();
   g.fillStyle="#19f06a";g.beginPath();g.moveTo(V[0],V[1]);g.lineTo(A[0],A[1]);g.lineTo(B[0],B[1]);g.closePath();g.fill()}
 function quad(g,x,y,w,h,a){g.beginPath();[[-1,-1],[1,-1],[1,1],[-1,1]].forEach(([i,j],n)=>{const p=rp(x,y,a,i*w/2,j*h/2);n?g.lineTo(p[0],p[1]):g.moveTo(p[0],p[1])});g.closePath()}
-function drawAdded(){const g=cx;
+function drawAdded(){const g=cx;drawMeas(g);
+  if(mode==="del"&&cutP&&hoverW){const a=w2s(cutP),b=w2s(hoverW),x0=Math.min(a[0],b[0]),y0=Math.min(a[1],b[1]),w0=Math.abs(a[0]-b[0]),h0=Math.abs(a[1]-b[1]);
+    g.fillStyle="rgba(255,107,107,.14)";g.fillRect(x0,y0,w0,h0);g.strokeStyle="#ff6b6b";g.lineWidth=1.5;g.setLineDash([6,4]);g.strokeRect(x0,y0,w0,h0);g.setLineDash([])}
   if(mode==="addline"&&addPts.length){g.strokeStyle=CAT[$("#ncat").value].c;g.lineWidth=2.6;g.beginPath();
     [...addPts,...(hoverW?[hoverW]:[])].forEach((p,i)=>{const q=w2s(p);i?g.lineTo(q[0],q[1]):g.moveTo(q[0],q[1])});g.stroke();
     g.fillStyle="#fff";for(const p of addPts){const q=w2s(p);g.fillRect(q[0]-3,q[1]-3,6,6)}}
   const GR="#19f06a";
   for(const q of Object.values(syms)){if(!q.assign)continue;
-    for(const it of q.items){if(!it.done)continue;const p=w2s([it.x,it.y]);g.fillStyle="rgba(25,240,106,.8)";g.strokeStyle=GR;g.lineWidth=2;
+    for(const it of q.items){if(!it.done||it.cut)continue;const p=w2s([it.x,it.y]);g.fillStyle="rgba(25,240,106,.8)";g.strokeStyle=GR;g.lineWidth=2;
       if(q.assign==="Box"&&it.g){boxDone(g,it.g);continue}if(q.assign==="Box")quad(g,p[0],p[1],it.w?it.w*view.s:18,it.h?it.h*view.s:14,it.ang||0);else{g.beginPath();g.arc(p[0],p[1],Math.max(it.r*view.s,5),0,6.283)}
       g.fill();g.stroke()}}
-  for(const a of added){if(a.k==="line")continue;const q=w2s([a.x,a.y]);
+  for(const a of added){if(a.k==="line"||a.cut)continue;const q=w2s([a.x,a.y]);
     if(a.k==="pole"){const r=Math.max(a.r*view.s,2);g.fillStyle=a.done?GR:"#fff";g.beginPath();g.arc(q[0],q[1],r,0,6.283);g.fill();g.strokeStyle=a.done?"#0b1218":"#ff9a1f";g.lineWidth=Math.max(1.5,r*.25);g.stroke()}
     else{const w=Math.max(a.w*view.s,4),h=Math.max(a.h*view.s,3),an=a.ang||0;g.strokeStyle=a.done?GR:"#a78bfa";g.lineWidth=2;quad(g,q[0],q[1],w,h,an);g.stroke();
       g.fillStyle=a.done?GR:"#fff";g.beginPath();[[-1,-1],[-1,1],[1,1]].forEach(([i,j],n)=>{const p=rp(q[0],q[1],an,i*w/2,j*h/2);n?g.lineTo(p[0],p[1]):g.moveTo(p[0],p[1])});g.closePath();g.fill()}}
@@ -426,9 +480,9 @@ function drawAdded(){const g=cx;
 const CBR=/\d+\s*[xX×]\s*\d+/;
 function wrapped(t){t=t.trim();if(t[0]!=="("||t[t.length-1]!==")")return false;let d=0;for(let i=0;i<t.length;i++){if(t[i]==="(")d++;else if(t[i]===")"){d--;if(d===0&&i<t.length-1)return false}}return d===0}
 function clipEx(iv,ex){if(!ex||!ex.length)return iv;const E=merged(ex),o=[];for(const v of iv){let a=v[0];for(const e of E){if(e[1]<=a||e[0]>=v[1])continue;if(e[0]>a)o.push([a,e[0]]);a=Math.max(a,e[1])}if(a<v[1])o.push([a,v[1]])}return o}
-const exLen=p=>p.exI?merged(p.exI).reduce((s,v)=>s+v[1]-v[0],0):0;
+const exLen=p=>{const x=xi(p);return x?x.reduce((s,v)=>s+v[1]-v[0],0):0};
 const effL=p=>p.L-exLen(p);
-const effDone=i=>clipEx(merged(done[i]),polys[i].exI).reduce((s,v)=>s+v[1]-v[0],0);
+const effDone=i=>clipEx(merged(done[i]),xi(polys[i])).reduce((s,v)=>s+v[1]-v[0],0);
 function stopAt(v,stops){for(const q of stops)if(Math.hypot(v[0]-q.x,v[1]-q.y)<=q.t)return true;return false}
 function turn(p,e){const a=p.pts[e-1],b=p.pts[e],c=p.pts[e+1],x1=b[0]-a[0],y1=b[1]-a[1],x2=c[0]-b[0],y2=c[1]-b[1],l=Math.hypot(x1,y1)*Math.hypot(x2,y2);return l?Math.acos(Math.max(-1,Math.min(1,(x1*x2+y1*y2)/l))):0}
 function PLR(l){
@@ -488,15 +542,17 @@ function findExBoxes(){exBoxes=[];
     if(exBoxes.some(b=>Math.hypot(b.x-q.x,b.y-q.y)<q.w*.3))continue;
     exBoxes.push(q)}}
 function markExisting(){
-  for(const p of polys)p.exI=null;
+  for(const p of polys)p.exI=null;xver++;
   if(!routeIdx.length)return;
-  const W=texts.filter(t=>t.cb&&t.s.some(l=>CBR.test(l)&&wrapped(l)));
+  for(const c of cuts)if(c.t==="e"&&polys[c.i])(polys[c.i].exI=polys[c.i].exI||[]).push([c.a,c.b]);
+  for(const i of routeIdx){const p=polys[i];if(EXL.test(p.layer))(p.exI=p.exI||[]).push([0,p.L])}
+  const W=texts.filter(t=>!t.cut&&t.cb&&t.s.some(l=>CBR.test(l)&&wrapped(l)));
   if(!W.length&&!exPoles.length&&!exBoxes.length)return;
   const stops=[];const add=(x,y,t)=>{if(t>0)stops.push({x,y,t})};
-  for(const q of Object.values(syms))if(q.assign)for(const it of q.items)if(!it.ex)add(it.x,it.y,it.r?it.r*1.3:Math.max(it.w||0,it.h||0)*.7);
-  for(const a of added)if(a.k!=="line")add(a.x,a.y,a.r?a.r*1.3:Math.max(a.w||0,a.h||0)*.7);
-  for(const o of exPoles)add(o.x,o.y,o.r*1.3);
-  for(const b of exBoxes)add(b.x,b.y,b.w*.7);
+  for(const q of Object.values(syms))if(q.assign)for(const it of q.items)if(!it.ex&&!it.cut)add(it.x,it.y,it.r?it.r*1.3:Math.max(it.w||0,it.h||0)*.7);
+  for(const a of added)if(a.k!=="line"&&!a.cut)add(a.x,a.y,a.r?a.r*1.3:Math.max(a.w||0,a.h||0)*.7);
+  for(const o of exPoles)if(!o.cut)add(o.x,o.y,o.r*1.3);
+  for(const b of exBoxes)if(!b.cut)add(b.x,b.y,b.w*.7);
   for(const t of W){
     const ln=t.s.find(l=>CBR.test(l)&&wrapped(l)),dx=Math.cos(t.rot),dy=Math.sin(t.rot),[cx0,cy0]=tcenter(t,ln),R=3.2*t.h,hit=new Map();
     for(const i of routeIdx){const p=polys[i];
@@ -504,18 +560,142 @@ function markExisting(){
         if(Math.abs(ex*dx+ey*dy)/Math.sqrt(l2)<.94)continue;
         const d=segDist({x:cx0,y:cy0},A,B);if(d<R){const h0=hit.get(i);if(!h0||d<h0.d)hit.set(i,{d,j})}}}
     for(const [i,h0] of hit)ext(polys[i],h0.j,stops)}
-  const objs=[...exPoles.map(o=>({x:o.x,y:o.y,t:o.r*1.15})),...exBoxes.map(b=>({x:b.x,y:b.y,t:b.h*.75}))];
+  const objs=[...exPoles.filter(o=>!o.cut).map(o=>({x:o.x,y:o.y,t:o.r*1.15})),...exBoxes.filter(b=>!b.cut).map(b=>({x:b.x,y:b.y,t:b.h*.75}))];
   if(objs.length)for(const i of routeIdx){const p=polys[i];
     for(let j=1;j<p.pts.length;j++){const A=p.pts[j-1],B=p.pts[j];for(const o of objs){if(segDist(o,A,B)<=o.t){ext(p,j,stops);break}}}}
 }
 function drawEx(){const E=[];for(const i of routeIdx){const p=polys[i];if(p.exI)for(const v of merged(p.exI))E.push(sub(p,v[0],v[1]))}
   if(!E.length)return;const g=cx;g.strokeStyle="#8693a1";g.lineWidth=2.6;g.beginPath();
   for(const q of E){const a=w2s(q[0]);g.moveTo(a[0],a[1]);for(let i=1;i<q.length;i++){const b=w2s(q[i]);g.lineTo(b[0],b[1])}}g.stroke()}
+function xi(p){if(p._v!==xver){p._v=xver;p._x=(p.exI||p.cutI)?merged([...(p.exI||[]),...(p.cutI||[])]):null}return p._x}
+function pieces(p){if(!p.cutI||!p.cutI.length)return[p.pts];const o=[];let a=0;for(const v of merged(p.cutI)){if(v[0]>a)o.push(sub(p,a,v[0]));a=Math.max(a,v[1])}if(a<p.L)o.push(sub(p,a,p.L));return o}
+function clipSeg(A,B,R){let t0=0,t1=1;const dx=B[0]-A[0],dy=B[1]-A[1];
+  for(const [p,q] of [[-dx,A[0]-R[0]],[dx,R[2]-A[0]],[-dy,A[1]-R[1]],[dy,R[3]-A[1]]]){
+    if(p===0){if(q<0)return null}else{const r=q/p;if(p<0){if(r>t1)return null;if(r>t0)t0=r}else{if(r<t0)return null;if(r<t1)t1=r}}}
+  return t1>t0?[t0,t1]:null}
+function applyCuts(){
+  for(const p of polys)p.cutI=null;
+  const wins=cuts.filter(c=>c.t==="w").map(c=>c.r);
+  for(const c of cuts)if(c.t==="l"){const p=polys[c.i];if(p)(p.cutI=p.cutI||[]).push([c.a,c.b])}
+  if(wins.length)for(const p of polys){if(p.del||p.layer==="0")continue;
+    if(!p.bb){let x0=1e300,y0=1e300,x1=-1e300,y1=-1e300;for(const v of p.pts){if(v[0]<x0)x0=v[0];if(v[0]>x1)x1=v[0];if(v[1]<y0)y0=v[1];if(v[1]>y1)y1=v[1]}p.bb=[x0,y0,x1,y1]}
+    for(const R of wins){if(p.bb[2]<R[0]||p.bb[0]>R[2]||p.bb[3]<R[1]||p.bb[1]>R[3])continue;
+      for(let j=1;j<p.pts.length;j++){const c=clipSeg(p.pts[j-1],p.pts[j],R);if(c){const l=p.cum[j]-p.cum[j-1];(p.cutI=p.cutI||[]).push([p.cum[j-1]+c[0]*l,p.cum[j-1]+c[1]*l])}}}}
+  for(const p of polys)if(p.cutI)p.cutI=merged(p.cutI);
+  const inW=(x,y)=>wins.some(R=>x>=R[0]&&x<=R[2]&&y>=R[1]&&y<=R[3]);
+  for(const q of Object.values(syms))for(const it of q.items)it.cut=it.ly!=="0"&&inW(it.x,it.y);
+  for(const a of added)if(a.k!=="line")a.cut=inW(a.x,a.y);
+  for(const o of exPoles)o.cut=inW(o.x,o.y);for(const b of exBoxes)b.cut=inW(b.x,b.y);
+  for(const f of fills){const c=f.pts[0];f.cut=f.layer!=="0"&&inW(c[0],c[1])}
+  for(const t of texts)t.cut=t.ly!=="0"&&inW(t.x,t.y);
+  xver++}
+function pushCut(c){cuts.push(c);hist.push({cut:1});applyCuts();syncCounts();syncDone();refresh()}
+function delClick(x,y){const w=s2w(x,y);if(!cutP){cutP=w;draw();return}
+  const R=[Math.min(cutP[0],w[0]),Math.min(cutP[1],w[1]),Math.max(cutP[0],w[0]),Math.max(cutP[1],w[1])];cutP=null;
+  if(R[2]-R[0]>0&&R[3]-R[1]>0)pushCut({t:"w",r:R});else draw()}
+function cutClick(x,y){if(!start){const h=pick(x,y);if(h){start=h;draw()}return}
+  const h=pick(x,y,start.i),s0=start;start=null;
+  if(h&&Math.abs(h.s-s0.s)>1e-9)pushCut({t:"l",i:s0.i,a:Math.min(s0.s,h.s),b:Math.max(s0.s,h.s)});else draw()}
+let srcText="",curProj=null,projCache={};const PR={db:null,assets:null,uid:null};
+const pm=t=>$("#pmsg").textContent=t||"";
+const fp=p=>p.pts[0][0].toFixed(3)+","+p.pts[0][1].toFixed(3)+","+p.L.toFixed(3);
+function getState(){
+  const dn=[];for(const i in done)if(polys[i]&&!polys[i].add)dn.push({f:fp(polys[i]),iv:done[i]});
+  const ct=[];for(const c of cuts){if(c.t==="w")ct.push(c);else if(polys[c.i])ct.push({t:c.t,f:fp(polys[c.i]),a:c.a,b:c.b})}
+  const ad=added.map(a=>a.k==="line"?{k:"line",cat:a.cat,pts:a.p.pts,iv:done[polys.indexOf(a.p)]||null}:{k:a.k,x:a.x,y:a.y,r:a.r,w:a.w,h:a.h,ang:a.ang,done:!!a.done});
+  const sd=[];for(const q of Object.values(syms))for(const it of q.items)if(it.done)sd.push([it.x,it.y]);
+  return{dn,ct,ad,sd}}
+function applyState(st){
+  const m=new Map();polys.forEach((p,i)=>{if(p.add)return;const k2=fp(p);if(!m.has(k2))m.set(k2,i)});
+  done={};for(const d of st.dn||[]){const i=m.get(d.f);if(i!=null)done[i]=d.iv}
+  cuts=[];for(const c of st.ct||[]){if(c.t==="w")cuts.push(c);else{const i=m.get(c.f);if(i!=null)cuts.push({t:c.t,i,a:c.a,b:c.b})}}
+  added=[];for(const a of st.ad||[]){if(a.k==="line"){const p=mkLine(a.pts,a.cat);polys.push(p);added.push({k:"line",cat:a.cat,p});if(a.iv)done[polys.length-1]=a.iv}else added.push(a)}
+  for(const q of Object.values(syms))for(const it of q.items)it.done=(st.sd||[]).some(v=>Math.abs(v[0]-it.x)<.05&&Math.abs(v[1]-it.y)<.05);
+  hist=[];applyCuts();refresh();syncCounts();syncDone();draw()}
+async function initStore(){
+  try{if(typeof claude==="undefined"||!claude.use)throw 0;
+    const [db,user,assets]=await Promise.all([claude.use("db"),claude.use("user"),claude.use("assets")]);
+    PR.db=db;PR.assets=assets;PR.uid=user?await user.id():null}catch(e){}
+  if(!PR.db||!PR.uid){pm("Kaydetme bu görünümde kullanılamıyor (oturum açık olmalı).");return}
+  await refreshList()}
+async function refreshList(){
+  try{const snap=await PR.db.collection("data/users/"+PR.uid).get();
+    const items=snap.docs.map(d=>d.data()).filter(x=>x&&x.kind==="proj").sort((a,b)=>b.updated-a.updated);
+    projCache=Object.fromEntries(items.map(p=>[p.pid,p]));
+    $("#plist").innerHTML=items.map(p=>`<div class="sy"><span title="${esc(p.name)}">${esc(p.name)}</span><small>${new Date(p.updated).toLocaleDateString("tr-TR")}</small><button data-o="${esc(p.pid)}">Aç</button><button data-x="${esc(p.pid)}">Sil</button></div>`).join("")||`<div class="sub">Kayıtlı proje yok</div>`}
+  catch(e){pm("Liste okunamadı: "+(e.message||e.code||e))}}
+async function saveProj(){
+  if(!PR.db||!PR.uid){pm("Kaydetme bu görünümde kullanılamıyor.");return}
+  if(!srcText||!polys.length){pm("Önce bir çizim yükleyin.");return}
+  const name=$("#pn").value.trim();if(!name){pm("Proje adı yazın.");return}
+  const same=Object.values(projCache).find(x=>x.name===name);
+  if(same&&(!curProj||curProj.pid!==same.pid)){pm("Bu adla başka bir proje var, farklı bir ad yazın.");return}
+  pm("Kaydediliyor...");
+  try{const pid=curProj?curProj.pid:"p"+Date.now().toString(36);let aid=curProj?curProj.aid:null;
+    if(!aid){if(!PR.assets){pm("Çizim dosyası kaydedilemedi: dosya saklama yetkiniz yok.");return}
+      const up=await PR.assets.upload(new Blob([srcText],{type:"text/plain"}),{type:"text/plain"});aid=up.id}
+    const st=JSON.stringify(getState());if(st.length>240000){pm("İşaretlemeler kaydedilemeyecek kadar büyük.");return}
+    await PR.db.collection("data/users/"+PR.uid).doc(pid).set({kind:"proj",pid,name,aid,updated:Date.now(),state:st});
+    curProj={pid,aid,name};pm("Kaydedildi: "+name);await refreshList()}
+  catch(e){pm("Kaydedilemedi: "+(e.message||e.code||e))}}
+async function openProj(pid){
+  const p=projCache[pid];if(!p)return;pm("Açılıyor...");
+  try{const r=await fetch("/_blob/"+p.aid);if(!r.ok)throw new Error("çizim dosyası bulunamadı");const txt=await r.text();
+    srcText=txt;load(txt);curProj={pid:p.pid,aid:p.aid,name:p.name};$("#pn").value=p.name;applyState(JSON.parse(p.state));pm("Açıldı: "+p.name)}
+  catch(e){pm("Açılamadı: "+(e.message||e.code||e))}}
+async function delProj(pid,btn){
+  if(!btn.dataset.sure){btn.dataset.sure="1";btn.textContent="Emin misiniz?";return}
+  const p=projCache[pid];if(!p)return;
+  try{await PR.db.collection("data/users/"+PR.uid).doc(pid).delete();if(PR.assets)await PR.assets.delete(p.aid);
+    if(curProj&&curProj.pid===pid)curProj=null;pm("Silindi: "+p.name);await refreshList()}
+  catch(e){pm("Silinemedi: "+(e.message||e.code||e))}}
+$("#psave").onclick=saveProj;
+$("#plist").addEventListener("click",e=>{const o=e.target.dataset.o,x=e.target.dataset.x;if(o)openProj(o);else if(x)delProj(x,e.target)});
+function calcW(og,ag,pipe){const cw=pipe?10:5;const groups=[];for(let i=0;i<og;i++)groups.push(3);if(ag>0)groups.push(ag);
+  const n=groups.reduce((a,b)=>a+b,0);if(!n)return null;
+  const within=groups.reduce((a,g)=>a+g-1,0),bims=groups.length-1;
+  return{n,groups,within,bims,cw,cab:cw*n,tak:7*within,bm:14*bims,end:14,total:cw*n+7*within+14*bims+14}}
+function renderCalc(){
+  const n0=id=>Math.max(0,parseInt($(id).value)||0),f0=id=>parseFloat(String($(id).value).replace(",","."))||0;
+  const og=n0("#ogN"),ag=n0("#agN"),ayd=n0("#aydN"),L=f0("#lenN"),D=f0("#depN"),pipe=$("#pipeN").checked,c=calcW(og,ag+ayd,pipe);
+  if(!c){$("#cres").innerHTML='<div class="sub">En az bir kablo girin.</div>';return}
+  const row=(a,b)=>`<div class="cr"><span>${a}</span><b>${b}</b></div>`,Wm=c.total/100;
+  let h=row(pipe?"Borulu kablolar":"Kablolar",`${c.n} × ${c.cw} = ${c.cab} cm`)+row("Kablo arası takoz",`${c.within} × 7 = ${c.tak} cm`)+row("Devre ayırıcı bims",`${c.bims} × 14 = ${c.bm} cm`)+row("Baş ve son takoz","2 × 7 = 14 cm")+row("Kanal genişliği",`<span style="color:var(--tx)">${c.total} cm</span>`);
+  if(L>0&&D>0)h+=`<div class="ct">${fmt(Wm*D*L,2)} m³</div><div class="cn">${fmt(L,2)} m × ${fmt(Wm,2)} m × ${fmt(D,2)} m</div>`;
+  else h+='<div class="cn">m³ için uzunluk ve derinlik girin; uzunluğu "Çizimden ölç" ile alabilirsiniz.</div>';
+  if(L>0){const parts=[[og?"OG kablo":"",3*og],[ag?"AG kablo":"",ag],[ayd?"AYD kablo":"",ayd]].filter(p=>p[0]);
+    h+='<div class="cn" style="margin-bottom:2px"><b>Kullanılan kablo</b></div>'+parts.map(p=>row(p[0],`${p[1]} × ${fmt(L,2)} = ${fmt(p[1]*L,1)} m`)).join("")+row("Toplam kablo",`<span style="color:var(--tx)">${fmt(c.n*L,1)} m</span>`)+(pipe?row("Boru (kablo başına 1)",`${c.n} × ${fmt(L,2)} = ${fmt(c.n*L,1)} m`):"")}
+  $("#cres").innerHTML=h}
+const mlen=a=>{let t=0;for(let i=1;i<a.length;i++)t+=Math.hypot(a[i][0]-a[i-1][0],a[i][1]-a[i-1][1]);return t*k};
+function measClick(x,y){const p=snapW(x,y);if(measDone){measPts=[];measDone=false}measPts.push(p);draw()}
+function measFinish(){if(mode!=="meas"||!measPts.length||measDone)return;
+  measPts=measPts.filter((v,i)=>i===0||v[0]!==measPts[i-1][0]||v[1]!==measPts[i-1][1]);
+  if(measPts.length<2){measPts=[];draw();return}
+  measDone=true;$("#lenN").value=mlen(measPts).toFixed(2);$("#calc").hidden=false;renderCalc();draw()}
+function drawMeas(g){if(!measPts.length)return;const pts=(measDone||!hoverW||mode!=="meas")?measPts:[...measPts,hoverW];
+  g.strokeStyle="#fff";g.lineWidth=2;g.beginPath();pts.forEach((p,i)=>{const q=w2s(p);i?g.lineTo(q[0],q[1]):g.moveTo(q[0],q[1])});g.stroke();
+  g.fillStyle="#fff";for(const p of measPts){const q=w2s(p);g.fillRect(q[0]-3,q[1]-3,6,6)}
+  const e=w2s(pts[pts.length-1]),t=fmt(mlen(pts),2)+" m";g.font="600 13px 'IBM Plex Sans',sans-serif";const w=g.measureText(t).width+14;
+  g.fillStyle="rgba(9,14,20,.88)";g.fillRect(e[0]+10,e[1]-28,w,22);g.fillStyle="#fff";g.textAlign="left";g.textBaseline="middle";g.fillText(t,e[0]+17,e[1]-17)}
+$("#calcBtn").onclick=()=>{const p=$("#calc");p.hidden=!p.hidden;if(!p.hidden)renderCalc()};
+$("#calcX").onclick=()=>{$("#calc").hidden=true};
+for(const id of ["#ogN","#agN","#aydN","#lenN","#depN"])$(id).addEventListener("input",renderCalc);
+$("#measGo").onclick=()=>setMode("meas");$("#pipeN").addEventListener("change",renderCalc);
+const EXL=/mevcut|mevcud|existing/i;
+function exClick(x,y){if(!start){const h=pick(x,y);if(h){start=h;draw()}return}
+  const h=pick(x,y,start.i),s0=start;start=null;
+  if(h&&Math.abs(h.s-s0.s)>1e-9)pushCut({t:"e",i:s0.i,a:Math.min(s0.s,h.s),b:Math.max(s0.s,h.s)});else draw()}
+function infoClick(x,y){const w=s2w(x,y),o={x:w[0],y:w[1]};let bd=14/view.s,bi=-1;
+  for(let i=0;i<polys.length;i++){const p=polys[i];if(p.del)continue;for(let j=1;j<p.pts.length;j++){const d=segDist(o,p.pts[j-1],p.pts[j]);if(d<bd){bd=d;bi=i}}}
+  const box=$("#info");if(bi<0){box.hidden=true;return}
+  const p=polys[bi],ex=exLen(p),st=p.add?"Eklenen hat":!p.rt?"Güzergah dışı":ex>=p.L*.999?"Mevcut (tamamı)":ex>0?"Kısmen mevcut":"Yeni";
+  box.hidden=false;box.innerHTML=`<b>${esc(p.layer)}</b><span>Uzunluk: ${fmt(p.L*k)} m</span><span>Kategori: ${p.rt?catOf(p):"-"}</span><span>Durum: ${st}</span>`+(p.col!=null?`<span>Renk: #${(p.col>>>0).toString(16).padStart(6,"0")}</span>`:"")}
 function qty(){for(const [t,d,b,s,p] of [["bt","bd","bb","bs","bp"],["dt","dd","db","ds","dp"]]){const T=Math.max(0,parseInt($("#"+t).value)||0),D=Math.max(0,parseInt($("#"+d).value)||0),P=T?Math.min(D,T)/T*100:0;$("#"+b).style.width=P+"%";$("#"+s).textContent=D+" / "+T+" adet";$("#"+p).textContent="%"+fmt(P)}}
 document.querySelectorAll(".q input").forEach(i=>i.addEventListener("input",qty));qty();
 $("#list").addEventListener("input",e=>{if(e.target.dataset.cab)catCable[e.target.dataset.cab]=e.target.value});
 addEventListener("resize",resize);
-setMode("pan");resize();render();
+document.querySelectorAll(".ib").forEach(b=>{const sp=b.querySelector("span"),t=(sp?sp.textContent+" — ":"")+b.title;b.dataset.tip=t;b.setAttribute("aria-label",t);b.removeAttribute("title")});
+setMode("pan");resize();render();initStore();
 </script>
 </body>
 </html>
