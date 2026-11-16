@@ -373,7 +373,15 @@ a{color:var(--ac)}
 .cvw .tb .ib{width:36px;height:36px}
 #vm{top:16px}#mm{right:16px;bottom:16px}
 }
-@media (min-width:861px) and (pointer:fine) and (max-height:800px){.cvw .tb .ib{width:32px;height:32px;border-radius:9px}}
+@media (min-width:861px) and (pointer:fine){
+.cvw .tb{flex-wrap:nowrap}
+.cvw .tb .ib{width:var(--ibs,36px);height:var(--ibs,36px);border-radius:calc(var(--ibs,36px)*.3)}
+.cvw .tb .ib svg{width:calc(var(--ibs,36px)*.5);height:calc(var(--ibs,36px)*.5)}
+.cvw .tb select{width:calc(var(--ibs,36px) + 2px);max-width:none}
+.cvw .tb.scr{overflow-y:auto;overflow-x:hidden}
+#proj,#notes,#enw,#shr{left:calc(var(--tbw,52px) + 28px)}
+#proj,#notes,#enw,#shr,#prog,#mat,#calc,#enj,#prjs{z-index:6}
+}
 .shchip{color:var(--ac);background:color-mix(in srgb,var(--ac) 13%,transparent);border-color:color-mix(in srgb,var(--ac) 38%,transparent);padding:4px 10px;font-size:12px;font-weight:500}
 .shchip.bad{color:#ff6b6b;background:color-mix(in srgb,#ff6b6b 12%,transparent);border-color:color-mix(in srgb,#ff6b6b 38%,transparent)}
 .cvw{background-color:var(--cv);background-image:radial-gradient(color-mix(in srgb,var(--mu) 20%,transparent) 1px,transparent 1px);background-size:24px 24px}
@@ -486,8 +494,8 @@ const EN0={box:["Giriş çıkış kablolarının bağlanması","Abone kabloları
  ayd:["Ankrajın konulması","Direğin dikilmesi","Kabloların bağlantısının yapılması"],
  direk:["Tavanın döşenmesi","Kabloların direğe çıkarılması","Direkt bağlantı [AG]","Başlıkların yapılıp bağlanması [YG]"],
  ek:["Yapıldı"],
- kosk:["Trafonun yerleştirilmesi","Panonun yerleştirilmesi","Kabloların başlıklarının yapılması","Giriş kablolarının bağlanması","Çıkış kablolarının bağlanması","Pano AG bağlantılarının yapılması","Hücrelere kablo bağlantılarının yapılması"]};
-let enS=(()=>{try{const o=JSON.parse(localStorage.getItem("kt-ensteps")||"null");if(o&&typeof o==="object")return Object.assign({},EN0,o)}catch(e){}return JSON.parse(JSON.stringify(EN0))})();
+ kosk:["Trafonun yerleştirilmesi","Panonun yerleştirilmesi","Kabloların başlıklarının yapılması","Giriş kablolarının bağlanması","Çıkış kablolarının bağlanması","Pano AG bağlantılarının yapılması","Hücrelere kablo bağlantılarının yapılması","Buchholz rölesi bağlantısının yapılması"]};
+let enS=(()=>{try{const o=JSON.parse(localStorage.getItem("kt-ensteps")||"null");if(o&&typeof o==="object"){if(Array.isArray(o.kosk)&&!o.kosk.some(x=>/bu[c]?hh?olz/i.test(x)))o.kosk.push("Buchholz rölesi bağlantısının yapılması");return Object.assign({},EN0,o)}}catch(e){}return JSON.parse(JSON.stringify(EN0))})();
 function addKosk(P){
   for(let g=0;g<4&&P.length>5;g++){const q=P.filter((b,i)=>{const a=P[(i+P.length-1)%P.length],c=P[(i+1)%P.length],ux=a[0]-b[0],uy=a[1]-b[1],vx=c[0]-b[0],vy=c[1]-b[1],l=Math.hypot(ux,uy)*Math.hypot(vx,vy);return !l||Math.abs((ux*vx+uy*vy)/l)<.9985||(ux*vx+uy*vy)>0});if(q.length===P.length)break;P=q}
   if(P.length!==5)return;let x0=1e300,y0=1e300,x1=-1e300,y1=-1e300;
@@ -531,6 +539,16 @@ function enBuild(){
     for(const f of fills){const n=f.pts.length;if(n<4||n>9)continue;let x0=1e300,y0=1e300,x1=-1e300,y1=-1e300;for(const p of f.pts){x0=Math.min(x0,p[0]);x1=Math.max(x1,p[0]);y0=Math.min(y0,p[1]);y1=Math.max(y1,p[1])}
       const sz=Math.max(x1-x0,y1-y0),d=Math.hypot((x0+x1)/2-tx,(y0+y1)/2-ty);if(sz>t.h*30||sz<t.h*.3||d>R*1.5+sz||d>=bd)continue;bd=d;bf={x:(x0+x1)/2,y:(y0+y1)/2,sz:sz/2}}
     if(bf)kc.push(bf)}
+  /* Trafo / köşk katmanı: içi dolu ev (beşgen) veya kare şekli = 1 yeni köşk; içi boş olanlar mevcut, sayılmaz */
+  {const TL=/trafo|k[oö][sş]k/i,D=bounds?Math.hypot(bounds.x1-bounds.x0,bounds.y1-bounds.y0):1e12,BB=P0=>{let x0=1e300,y0=1e300,x1=-1e300,y1=-1e300;for(const q of P0){x0=Math.min(x0,q[0]);x1=Math.max(x1,q[0]);y0=Math.min(y0,q[1]);y1=Math.max(y1,q[1])}return[x0,y0,x1,y1]};
+    const outl=[];for(const p of polys){if(p.rt||p.del||p.add||!TL.test(p.layer||"")||p.pts.length<4)continue;const b=bbox(p);if(Math.hypot(b[2]-b[0],b[3]-b[1])>D*.05)continue;outl.push(b)}
+    const fb=[];for(const f of fills){if(f.pts.length<3||f.pts.length>40)continue;const b=BB(f.pts),w=b[2]-b[0],h=b[3]-b[1];if(!(w>0&&h>0)||Math.hypot(w,h)>D*.05)continue;
+      const on=TL.test(f.layer||"")||outl.some(o=>{const e=Math.max(o[2]-o[0],o[3]-o[1])*.15;return b[0]>=o[0]-e&&b[2]<=o[2]+e&&b[1]>=o[1]-e&&b[3]<=o[3]+e});if(on)fb.push(b)}
+    if(fb.length&&fb.length<=5000){const par=fb.map((_,i)=>i),fd=i=>{while(par[i]!==i)i=par[i]=par[par[i]];return i};
+      for(let a=0;a<fb.length;a++)for(let c=a+1;c<fb.length;c++){const A=fb[a],C=fb[c],g=Math.min(A[2]-A[0],A[3]-A[1],C[2]-C[0],C[3]-C[1])*.05;if(A[0]-g<=C[2]&&C[0]-g<=A[2]&&A[1]-g<=C[3]&&C[1]-g<=A[3]){const x=fd(a),y=fd(c);if(x!==y)par[x]=y}}
+      const cl=new Map();fb.forEach((b,i)=>{const r=fd(i),o=cl.get(r);if(!o)cl.set(r,b.slice());else{o[0]=Math.min(o[0],b[0]);o[1]=Math.min(o[1],b[1]);o[2]=Math.max(o[2],b[2]);o[3]=Math.max(o[3],b[3])}});
+      for(const o of cl.values()){const w=o[2]-o[0],h=o[3]-o[1];if(Math.max(w,h)>Math.min(w,h)*2.5)continue;const x=(o[0]+o[2])/2,y=(o[1]+o[3])/2,sz=Math.max(w,h)/2;
+        if(kc.some(k=>Math.hypot(k.x-x,k.y-y)<=Math.max(k.sz,sz)*1.5))continue;kc.push({x,y,sz})}}}
   for(const h of kc){if(cuts.some(c=>c.t==="s"&&Math.hypot(c.x-h.x,c.y-h.y)<=c.R))continue;
     const sz=h.sz;let nm=null,bd=1e300;
     for(const t of texts){if(t.cut)continue;const z=t.s.join(" ");if(!/k[öo]ş?k/i.test(z))continue;const d=Math.hypot(t.x-h.x,t.y-h.y);if(d<bd&&d<=sz*6+3*t.h){bd=d;nm=z.replace(/\s+/g," ").trim()}}
@@ -624,7 +642,15 @@ const esc=s=>s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&qu
 const fmt=(n,d=1)=>n.toLocaleString("tr-TR",{maximumFractionDigits:d,minimumFractionDigits:d});
 const w2s=p=>[p[0]*view.s+view.tx,-p[1]*view.s+view.ty],s2w=(x,y)=>[(x-view.tx)/view.s,-(y-view.ty)/view.s];
 const msg=t=>$("#msg").textContent=t||"";
-function resize(){const d=Math.min(devicePixelRatio||1,2);W=cv.clientWidth;H=cv.clientHeight;cv.width=W*d;cv.height=H*d;cx.setTransform(d,0,0,d,0,0);draw()}
+function resize(){const d=Math.min(devicePixelRatio||1,2);W=cv.clientWidth;H=cv.clientHeight;cv.width=W*d;cv.height=H*d;cx.setTransform(d,0,0,d,0,0);fitTb();draw()}
+/* bilgisayarda sol araç çubuğu tek sütuna sığsın: simge boyutunu yüksekliğe göre ayarla */
+function fitTb(){const tb=document.querySelector(".cvw .tb"),wr=document.querySelector(".cvw");if(!tb||!wr)return;
+  if(!matchMedia("(min-width:861px) and (pointer:fine)").matches){tb.style.removeProperty("--ibs");tb.classList.remove("scr");return}
+  const its=[...tb.querySelectorAll(".ib,select")].filter(e=>e.offsetParent!==null||e.getClientRects().length),n=its.length;if(!n)return;
+  const grps=[...tb.querySelectorAll(".grp")].filter(g=>g.offsetParent!==null).length;
+  const avail=wr.clientHeight-24-10-Math.max(0,grps-1)*13-n*2;let sz=Math.floor(avail/n);sz=Math.max(24,Math.min(36,sz));
+  tb.style.setProperty("--ibs",sz+"px");tb.classList.toggle("scr",sz*n+n*2+Math.max(0,grps-1)*13+10>wr.clientHeight-24);
+  wr.style.setProperty("--tbw",tb.offsetWidth+"px")}
 function fit(){if(!bounds)return;const bw=Math.max(bounds.x1-bounds.x0,1e-9),bh=Math.max(bounds.y1-bounds.y0,1e-9);view.s=Math.min(W/bw,H/bh)*.95;fitS=view.s;view.tx=W/2-(bounds.x0+bw/2)*view.s;view.ty=H/2+(bounds.y0+bh/2)*view.s;draw()}
 /* DXF → polylines */
 const mul=(m,n)=>[m[0]*n[0]+m[2]*n[1],m[1]*n[0]+m[3]*n[1],m[0]*n[2]+m[2]*n[3],m[1]*n[2]+m[3]*n[3],m[0]*n[4]+m[2]*n[5]+m[4],m[1]*n[4]+m[3]*n[5]+m[5]];
